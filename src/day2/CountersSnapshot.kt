@@ -11,8 +11,16 @@ class CountersSnapshot {
     fun incrementCounter2() = counter2.getAndIncrement()
     fun incrementCounter3() = counter3.getAndIncrement()
 
+    private val snapshot get() = Triple(
+        first = counter1.get(),
+        second = counter2.get(),
+        third = counter3.get(),
+    )
+
     fun countersSnapshot(): Triple<Long, Long, Long> {
-        // TODO: make me atomic using the double-collect technique.
-        return Triple(counter1.get(), counter2.get(), counter3.get())
+        while (true) {
+            val initial = snapshot
+            if (initial == snapshot) return initial
+        }
     }
 }
