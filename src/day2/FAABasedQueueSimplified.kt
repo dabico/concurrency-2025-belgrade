@@ -9,27 +9,30 @@ class FAABasedQueueSimplified<E> : Queue<E> {
     private val enqIdx = AtomicLong(0)
     private val deqIdx = AtomicLong(0)
 
+    private val shouldTryDequeue get(): Boolean {
+        while (true) {
+            val deq = deqIdx.get().toInt()
+            val enq = enqIdx.get().toInt()
+            if (deq != deqIdx.get().toInt()) continue
+            return deq < enq
+        }
+    }
+
     override fun enqueue(element: E) {
-        // TODO: Increment the counter atomically via Fetch-and-Add.
-        // TODO: Use `getAndIncrement()` function for that.
-        val i = enqIdx.get()
-        enqIdx.set(i + 1)
-        // TODO: Atomically install the element into the cell
-        // TODO: if the cell is not poisoned.
-        infiniteArray.set(i.toInt(), element)
+        while (true) {
+            val idx = enqIdx.getAndIncrement().toInt()
+            if (infiniteArray.compareAndSet(idx, null, element)) return
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun dequeue(): E? {
-        // Is this queue empty?
-        if (enqIdx.get() <= deqIdx.get()) return null
-        // TODO: Increment the counter atomically via Fetch-and-Add.
-        // TODO: Use `getAndIncrement()` function for that.
-        val i = deqIdx.get()
-        deqIdx.set(i + 1)
-        // TODO: Try to retrieve an element if the cell contains an
-        // TODO: element, poisoning the cell if it is empty.
-        return infiniteArray.get(i.toInt()) as E
+        while (true) {
+            if (!shouldTryDequeue) return null
+            val idx = deqIdx.getAndIncrement().toInt()
+            if (infiniteArray.compareAndSet(idx, null, POISONED)) continue
+            return infiniteArray.getAndSet(idx, null) as E
+        }
     }
 
     override fun validate() {
