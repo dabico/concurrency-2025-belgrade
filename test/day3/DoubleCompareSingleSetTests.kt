@@ -21,10 +21,11 @@ class DoubleCompareSingleSetOnLockedStateTest : AbstractDoubleCompareSingleSetTe
 @Param(name = "value", gen = IntGen::class, conf = "0:2")
 abstract class AbstractDoubleCompareSingleSetTest(
     dcss: DoubleCompareSingleSet<Int>,
-    checkObstructionFreedom: Boolean
+    checkObstructionFreedom: Boolean,
 ): TestBase(
     sequentialSpecification = DCSSSequential::class,
     checkObstructionFreedom = checkObstructionFreedom,
+    scenarios = 1000,
 ) {
     private val dcss = dcss
 
