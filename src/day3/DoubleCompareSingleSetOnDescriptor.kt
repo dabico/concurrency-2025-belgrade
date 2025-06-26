@@ -16,14 +16,24 @@ class DoubleCompareSingleSetOnDescriptor<E : Any>(initialValue: E) : DoubleCompa
     }
 
     override fun getA(): E {
-        // TODO: 'a' can store CAS2Descriptor
-        return a.get() as E
+        while (true) {
+            when (val value = a.get()) {
+                is DoubleCompareSingleSetOnDescriptor<*>.DcssDescriptor -> value.help()
+                else -> return value as E
+            }
+        }
     }
 
     override fun dcss(expectedA: E, updateA: E, expectedB: E): Boolean {
-        val descriptor = DcssDescriptor(expectedA, updateA, expectedB)
-        descriptor.apply()
-        return descriptor.status.get() == SUCCESS
+        val descriptor = DcssDescriptor(
+            expectedA = expectedA,
+            updateA = updateA,
+            expectedB = expectedB,
+        )
+        return with(descriptor) {
+            apply()
+            status.get() == SUCCESS
+        }
     }
 
     private inner class DcssDescriptor(
@@ -31,20 +41,42 @@ class DoubleCompareSingleSetOnDescriptor<E : Any>(initialValue: E) : DoubleCompa
     ) {
         val status = AtomicReference(UNDECIDED)
 
+        fun install() {
+            while (true) {
+                when (val currentA = a.get()) {
+                    is DoubleCompareSingleSetOnDescriptor<*>.DcssDescriptor -> currentA.help()
+                    expectedA -> {
+                        if (!a.compareAndSet(currentA, this)) continue
+                        help()
+                        return
+                    }
+                    else -> {
+                        status.compareAndSet(UNDECIDED, FAILED)
+                        return
+                    }
+                }
+            }
+        }
+
+        fun help() {
+            val unchanged = b.get() == expectedB
+            status.compareAndSet(UNDECIDED, if (unchanged) SUCCESS else FAILED)
+            when (status.get()) {
+                SUCCESS -> a.compareAndSet(this, updateA)
+                FAILED -> a.compareAndSet(this, expectedA)
+                else -> error("Can only be in $SUCCESS or $FAILED state!")
+            }
+        }
+
         fun apply() {
-            // TODO: (1) Install the descriptor to 'a'
-            // TODO: (2) Apply logically: check whether 'b' == expectedB and update the status
-            // TODO: (3) Apply physically: update 'a'
+            install()
+            help()
         }
     }
 
-    override fun setB(value: E) {
-        b.set(value)
-    }
+    override fun setB(value: E) = b.set(value)
 
-    override fun getB(): E {
-        return b.get()
-    }
+    override fun getB(): E = b.get()
 
     enum class Status {
         UNDECIDED, SUCCESS, FAILED
