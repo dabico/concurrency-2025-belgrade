@@ -23,6 +23,12 @@ class AtomicArrayWithCAS2SingleWriterTest : TestBase(
         index1: Int, expected1: Int, update1: Int,
         index2: Int, expected2: Int, update2: Int
     ) = array.cas2(index1, expected1, update1, index2, expected2, update2)
+
+    override fun Options<*, *>.customConfiguration() {
+        if (this is ModelCheckingOptions) {
+            invocationsPerIteration(1000)
+        }
+    }
 }
 
 class AtomicArrayWithCAS2SimplifiedTest : TestBase(
@@ -198,6 +204,7 @@ class AtomicArrayWithCAS2AndImplementedDCSSTest : TestBase(
             iterations(0) // DO NOT RUN STRESS TESTS
         } else {
             this as ModelCheckingOptions
+            invocationsPerIteration(1000)
             addGuarantee(
                 forClasses(AtomicArrayWithCAS2AndImplementedDCSS::class)
                     .methods("dcss")
@@ -205,6 +212,7 @@ class AtomicArrayWithCAS2AndImplementedDCSSTest : TestBase(
             )
         }
     }
+
 }
 
 @Param(name = "index", gen = IntGen::class, conf = "0:${ARRAY_SIZE - 1}")
