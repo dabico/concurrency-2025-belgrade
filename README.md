@@ -167,3 +167,97 @@ in linear time, but remove this node in _constant_ time.
 
 * `./gradlew test --tests MSQueueWithConstantTimeRemoveTest` on Linux or MacOS
 * `gradlew test --tests MSQueueWithConstantTimeRemoveTest` on Windows
+
+
+## Day 3
+
+### Double-Compare-Single-Set: Reentrant Lock
+
+In [`src/day3/DoubleCompareSingleSetOnReentrantLock.kt`](src/day3/DoubleCompareSingleSetOnReentrantLock.kt),
+implement the `getA()` and `dcss(..)` operations.
+Use a `ReentrantLock` to protect the `A` reference.
+
+To test your solution, please run:
+
+* `./gradlew test --tests DoubleCompareSingleSetOnReentrantLockTest` on Linux or MacOS
+* `gradlew test --tests DoubleCompareSingleSetOnReentrantLockTest` on Windows
+
+
+### Double-Compare-Single-Set: "Locked" State
+
+In [`src/day3/DoubleCompareSingleSetOnLockedState.kt`](src/day3/DoubleCompareSingleSetOnLockedState.kt),
+implement the `getA()` and `dcss(..)` operations.
+Use a special "Locked" value to mark the `A` reference as locked,
+actively waiting for the state change in other operations.
+
+To test your solution, please run:
+
+* `./gradlew test --tests DoubleCompareSingleSetOnLockedStateTest` on Linux or MacOS
+* `gradlew test --tests DoubleCompareSingleSetOnLockedStateTest` on Windows
+
+
+### Double-Compare-Single-Set: Descriptors
+
+In [`src/day3/DoubleCompareSingleSetOnDescriptor.kt`](src/day3/DoubleCompareSingleSetOnDescriptor.kt),
+implement the `getA()` and `dcss(..)` operations.
+Use a `DcssDescriptor` to apply the `dcss(..)` operation.
+Other threads should help this descriptor to finish if they observe it in `A`.
+
+To test your solution, please run:
+
+* `./gradlew test --tests DoubleCompareSingleSetOnDescriptorTest` on Linux or MacOS
+* `gradlew test --tests DoubleCompareSingleSetOnDescriptorTest` on Windows
+
+
+### CAS2: Single-Writer
+
+In [`src/day3/AtomicArrayWithCAS2SingleWriter.kt`](src/day3/AtomicArrayWithCAS2SingleWriter.kt),
+implement the `cas2(..)` and `get(..)` operations.
+In this data task, `CAS2(..)` can be called only in one thread,
+so concurrent `CAS2(..)` invocations are forbidden.
+
+To test your solution, please run:
+
+* `./gradlew test --tests AtomicArrayWithCAS2SingleWriterTest` on Linux or MacOS
+* `gradlew test --tests AtomicArrayWithCAS2SingleWriterTest` on Windows
+
+
+### CAS2: Simplified
+
+In [`src/day3/AtomicArrayWithCAS2Simplified.kt`](src/day3/AtomicArrayWithCAS2Simplified.kt),
+implement the `cas2(..)` operation. In this data task, all successful updates
+install unique values in the array cells.
+
+To test your solution, please run:
+
+* `./gradlew test --tests AtomicArrayWithCAS2SimplifiedTest` on Linux or MacOS
+* `gradlew test --tests AtomicArrayWithCAS2SimplifiedTest` on Windows
+
+
+### CAS2: With Implemented DCSS
+
+In [`src/day3/AtomicArrayWithCAS2.kt`](src/day3/AtomicArrayWithCAS2.kt),
+implement the `cas2(..)` operation.
+Unlike in the "CAS2: Simplified" task, updates are no longer unique.
+This can lead to the ABA problem. To solve it, please use
+the already implemented Double-Compare-Single-Set operation when installing CAS2 descriptors.
+
+To test your solution, please run:
+
+* `./gradlew test --tests AtomicArrayWithCAS2AndImplementedDCSSTest` on Linux or MacOS
+* `gradlew test --tests AtomicArrayWithCAS2AndImplementedDCSSTest` on Windows
+
+
+### CAS2
+
+In [`src/day3/AtomicArrayWithCAS2.kt`](src/day3/AtomicArrayWithCAS2.kt),
+implement the `cas2(..)` operation.
+Unlike in the "CAS2: Simplified" task, updates are no longer unique.
+This can lead to the ABA problem. To solve it, please use
+the Double-Compare-Single-Set operation when installing CAS2 descriptors.
+In this task, you need to implement DCSS via descriptors.
+
+To test your solution, please run:
+
+* `./gradlew test --tests AtomicArrayWithCAS2Test` on Linux or MacOS
+* `gradlew test --tests AtomicArrayWithCAS2Test` on Windows
