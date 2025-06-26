@@ -13,7 +13,7 @@ class DoubleCompareSingleSetOnReentrantLockTest : AbstractDoubleCompareSingleSet
     checkObstructionFreedom = false
 )
 
-class DoubleCompareSingleSetOnLockStateTest : AbstractDoubleCompareSingleSetTest(
+class DoubleCompareSingleSetOnLockedStateTest : AbstractDoubleCompareSingleSetTest(
     dcss = DoubleCompareSingleSetOnLockedState(0),
     checkObstructionFreedom = false
 )
