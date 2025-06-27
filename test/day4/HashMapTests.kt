@@ -7,7 +7,7 @@ class SingleWriterHashTableTest : TestBase(
     sequentialSpecification = SequentialHashTableIntInt::class,
     scenarios = 300
 ) {
-    private val hashTable = SingleWriterHashTable<Int, Int>(initialCapacity = 2)
+    private val hashTable = SingleWriterHashTable<Int, Int>(initialCapacity = 1)
 
     @Operation(nonParallelGroup = "writer")
     fun put(key: Int, value: Int): Int? = hashTable.put(key, value)
