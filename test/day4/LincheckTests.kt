@@ -21,7 +21,7 @@ import kotlin.test.*
 */
 class CounterTest {
     @Test
-    fun test() = Lincheck.runConcurrentTest {
+    fun test() {
         var counter = 0
         val t1 = thread {
             counter++
@@ -47,17 +47,7 @@ class CounterTest {
 class ScheduledThreadPoolExecutorTest {
     @Test
     fun test() = Lincheck.runConcurrentTest {
-        val executor = ScheduledThreadPoolExecutor(2)
-        thread {
-            executor.shutdown()
-        }
-        try {
-            val future = executor.schedule({}, 10, TimeUnit.MILLISECONDS)
-            future.get()
-        } catch (_: RejectedExecutionException) {
-            // As we shutdown the executor in a parallel thread,
-            // it's expected that the task might be rejected.
-        }
+       // TODO
     }
 }
 
@@ -67,26 +57,4 @@ class ScheduledThreadPoolExecutorTest {
          all the peek/poll/add first/last operations on the deque.
  */
 class ConcurrentLinkedDequeTest {
-    private val deque = ConcurrentLinkedDeque<Int>()
-
-    @Operation
-    fun addFirst(element: Int) = deque.addFirst(element)
-
-    @Operation
-    fun addLast(element: Int) = deque.addLast(element)
-
-    @Operation
-    fun peekFirst() = deque.peekFirst()
-
-    @Operation
-    fun peekLast() = deque.peekLast()
-
-    @Operation
-    fun pollFirst() = deque.pollFirst()
-
-    @Operation
-    fun pollLast() = deque.pollLast()
-
-    @Test
-    fun test() = ModelCheckingOptions().check(this::class)
 }
