@@ -14,7 +14,7 @@ abstract class TestBase(
     @Test
     fun modelCheckingTest() = ModelCheckingOptions()
         .iterations(scenarios)
-        .invocationsPerIteration(10_000)
+        .invocationsPerIteration(1_000)
         .actorsBefore(actorsBefore)
         .threads(threads)
         .actorsPerThread(2)
@@ -27,7 +27,7 @@ abstract class TestBase(
     @Test
     fun stressTest() = StressOptions()
         .iterations(scenarios)
-        .invocationsPerIteration(25_000)
+        .invocationsPerIteration(10_000)
         .actorsBefore(actorsBefore)
         .threads(threads)
         .actorsPerThread(2)

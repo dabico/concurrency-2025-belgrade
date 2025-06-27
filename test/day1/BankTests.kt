@@ -39,13 +39,6 @@ abstract class AbstractBankTest(
     ) {
         if (fromId != toId) bank.transfer(fromId, toId, amount)
     }
-
-    override fun Options<*, *>.customConfiguration() {
-        // Make the test faster in the model-checking mode
-        if (this is ModelCheckingOptions) {
-            invocationsPerIteration(1000)
-        }
-    }
 }
 
 class BankSequential {

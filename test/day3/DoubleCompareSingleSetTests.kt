@@ -40,12 +40,6 @@ abstract class AbstractDoubleCompareSingleSetTest(
 
     @Operation(params = ["value", "value", "value"])
     fun dcss(expectedA: Int, updateA: Int, expectedB: Int) = dcss.dcss(expectedA, updateA, expectedB)
-
-    override fun Options<*, *>.customConfiguration() {
-        if (this is ModelCheckingOptions) {
-            invocationsPerIteration(1000)
-        }
-    }
 }
 
 class DCSSSequential {

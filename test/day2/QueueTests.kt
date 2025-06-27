@@ -6,14 +6,7 @@ import TestBase
 import org.jetbrains.lincheck.datastructures.*
 import kotlin.io.path.Path
 
-class FAABasedQueueSimplifiedTest : AbstractQueueTest(FAABasedQueueSimplified()) {
-    override fun Options<*, *>.customConfiguration() {
-        if (this is ModelCheckingOptions) {
-            invocationsPerIteration(1000)
-        }
-    }
-}
-
+class FAABasedQueueSimplifiedTest : AbstractQueueTest(FAABasedQueueSimplified())
 class FAABasedQueueTest : AbstractQueueTest(FAABasedQueue())
 
 class MSQueueWithOnlyLogicalRemoveTest : AbstractQueueWithRemoveTest(MSQueueWithOnlyLogicalRemove())
