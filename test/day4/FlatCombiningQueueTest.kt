@@ -8,6 +8,10 @@ import kotlin.concurrent.*
 
 class FlatCombiningQueueTest : AbstractQueueTest(FlatCombiningQueue(), checkObstructionFreedom = false) {
 
+    // Dirty hack to run modelCheckingTest first
+    @Test
+    override fun modelCheckingTest() = super.modelCheckingTest()
+
     @Test
     fun testHelping() {
         val lockReleases = AtomicInteger(0)
@@ -39,6 +43,6 @@ class FlatCombiningQueueTest : AbstractQueueTest(FlatCombiningQueue(), checkObst
         }.forEach { it.join() }
     }
 
-    private val THREADS = 4
+    private val THREADS = 6
     private val ENQ_DEQ_PAIRS_PER_THREAD = 1000_000
 }

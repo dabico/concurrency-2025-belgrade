@@ -12,7 +12,7 @@ abstract class TestBase(
     val actorsBefore: Int = 1
 ) {
     @Test
-    fun modelCheckingTest() = ModelCheckingOptions()
+    open fun modelCheckingTest() = ModelCheckingOptions()
         .iterations(scenarios)
         .invocationsPerIteration(1_000)
         .actorsBefore(actorsBefore)
